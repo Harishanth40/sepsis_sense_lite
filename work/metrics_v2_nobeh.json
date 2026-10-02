@@ -1,0 +1,46 @@
+{
+  "core_vitals_labs": {
+    "AUROC": 0.9081,
+    "AUPRC": 0.3078,
+    "PhysioNet_utility_row_level": 0.573,
+    "n_test_patients": 6051,
+    "alerts_with_immediate_rules": {
+      "septic_patients": 440,
+      "pct_septic_alerted_1to12h_before_onset": 89.8,
+      "pct_septic_alerted_incl_late": 94.5,
+      "median_lead_time_hours": 7.0,
+      "pct_nonseptic_patients_with_any_alert": 66.9,
+      "alerts_per_100_patient_days": 131.1
+    },
+    "alerts_score_only": {
+      "septic_patients": 440,
+      "pct_septic_alerted_1to12h_before_onset": 81.6,
+      "pct_septic_alerted_incl_late": 88.6,
+      "median_lead_time_hours": 7.0,
+      "pct_nonseptic_patients_with_any_alert": 24.1,
+      "alerts_per_100_patient_days": 51.3
+    }
+  },
+  "train_A_test_B": {
+    "AUROC": 0.8518,
+    "AUPRC": 0.1732,
+    "PhysioNet_utility_row_level": 0.3527,
+    "n_test_patients": 20000,
+    "alerts_with_immediate_rules": {
+      "septic_patients": 1142,
+      "pct_septic_alerted_1to12h_before_onset": 72.9,
+      "pct_septic_alerted_incl_late": 80.6,
+      "median_lead_time_hours": 6.0,
+      "pct_nonseptic_patients_with_any_alert": 53.9,
+      "alerts_per_100_patient_days": 88.5
+    },
+    "alerts_score_only": {
+      "septic_patients": 1142,
+      "pct_septic_alerted_1to12h_before_onset": 55.2,
+      "pct_septic_alerted_incl_late": 62.3,
+      "median_lead_time_hours": 5.0,
+      "pct_nonseptic_patients_with_any_alert": 14.0,
+      "alerts_per_100_patient_days": 22.7
+    }
+  }
+}

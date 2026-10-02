@@ -1,0 +1,61 @@
+patient,ICULOS,note,confusion,cough,chills,urinary,wound_redness,catheter_line
+A_p000001,4,increased work of breathing. Chills reported. Wound clean and dry.,0,0,1,0,0,0
+A_p000001,8,"tachycardic on monitor. breathing fast. BP soft, MD aware. Productive cough, yellow sputum.",0,1,0,0,0,0
+A_p000001,12,HR running high. Chills reported.,0,0,1,0,0,0
+A_p000001,16,HR running high. breathing fast. Patient appears confused and restless. Tolerating feeds.,1,0,0,0,0,0
+A_p000001,20,"tachycardic on monitor. No cough, no chills.",0,0,0,0,0,0
+A_p000001,24,"tachycardic on monitor. increased work of breathing. New confusion, disoriented to time. Increased cough overnight.",1,1,0,0,0,0
+A_p000001,28,tachycardic on monitor. increased work of breathing. Patient appears confused and restless.,1,0,0,0,0,0
+A_p000001,32,"tachycardic on monitor. increased work of breathing. No cough, no chills.",0,0,0,0,0,0
+A_p000001,36,increased work of breathing. Chills reported.,0,0,1,0,0,0
+A_p000001,40,"tachycardic on monitor. Alert and oriented x3, denies confusion.",0,0,0,0,0,0
+A_p000001,44,"tachycardic on monitor. breathing fast. Productive cough, yellow sputum.",0,1,0,0,0,0
+A_p000001,48,Chills reported. Wound clean and dry.,0,0,1,0,0,0
+A_p000001,52,"breathing fast. New confusion, disoriented to time. Productive cough, yellow sputum. No cough, no chills.",1,1,0,0,0,0
+A_p000002,4,Erythema around wound edges.,0,0,0,0,1,0
+A_p000002,8,Patient appears confused and restless.,1,0,0,0,0,0
+A_p000002,12,No confusion noted. Wound redness and purulent discharge at incision.,0,0,0,0,1,0
+A_p000002,16,"New confusion, disoriented to time. Wound redness and purulent discharge at incision.",1,0,0,0,1,0
+A_p000002,20,Patient appears confused and restless. Wound redness and purulent discharge at incision.,1,0,0,0,1,0
+A_p000003,4,increased work of breathing. Foley draining cloudy urine.,0,0,0,1,0,1
+A_p000003,8,Pt febrile. breathing fast. Patient appears confused and restless. Foley draining cloudy urine.,1,0,0,1,0,1
+A_p000003,12,Feels warm to touch. Complains of burning urination.,0,0,0,1,0,0
+A_p000003,16,increased work of breathing. Foley draining cloudy urine.,0,0,0,1,0,1
+A_p000003,20,Wound clean and dry.,0,0,0,0,0,0
+A_p000003,24,increased work of breathing. Foley draining cloudy urine. Tolerating feeds.,0,0,0,1,0,1
+A_p000003,28,Spiked a temp overnight. Foley draining cloudy urine.,0,0,0,1,0,1
+A_p000003,32,breathing fast. No confusion noted. Foley draining cloudy urine.,0,0,0,1,0,1
+A_p000003,36,"breathing fast. New confusion, disoriented to time. Complains of burning urination.",1,0,0,1,0,0
+A_p000003,40,"breathing fast. Alert and oriented x3, denies confusion. Foley draining cloudy urine.",0,0,0,1,0,1
+A_p000003,44,"increased work of breathing. Alert and oriented x3, denies confusion. Complains of burning urination.",0,0,0,1,0,0
+A_p000003,48,increased work of breathing. Patient appears confused and restless. Complains of burning urination.,1,0,0,1,0,0
+A_p000004,4,tachycardic on monitor. No confusion noted.,0,0,0,0,0,0
+A_p000004,8,"BP soft, MD aware. No cough, no chills.",0,0,0,0,0,0
+A_p000004,12,No confusion noted. Tolerating feeds.,0,0,0,0,0,0
+A_p000004,16,Resting comfortably.,0,0,0,0,0,0
+A_p000004,20,"tachycardic on monitor. BP soft, MD aware. Alert and oriented x3, denies confusion.",0,0,0,0,0,0
+A_p000004,24,HR running high.,0,0,0,0,0,0
+A_p000004,28,HR running high.,0,0,0,0,0,0
+A_p000005,4,"No cough, no chills.",0,0,0,0,0,0
+A_p000005,8,"No cough, no chills.",0,0,0,0,0,0
+A_p000005,12,Wound clean and dry.,0,0,0,0,0,0
+A_p000005,16,Resting comfortably.,0,0,0,0,0,0
+A_p000005,20,Resting comfortably.,0,0,0,0,0,0
+A_p000005,24,Wound clean and dry.,0,0,0,0,0,0
+A_p000005,28,"Alert and oriented x3, denies confusion.",0,0,0,0,0,0
+A_p000005,32,Patient appears confused and restless.,1,0,0,0,0,0
+A_p000005,36,No confusion noted.,0,0,0,0,0,0
+A_p000005,40,Wound clean and dry.,0,0,0,0,0,0
+A_p000005,44,Wound clean and dry.,0,0,0,0,0,0
+A_p000005,48,Resting comfortably.,0,0,0,0,0,0
+A_p000006,4,HR running high. increased work of breathing. Wound redness and purulent discharge at incision.,0,0,0,0,1,0
+A_p000006,8,breathing fast.,0,0,0,0,0,0
+A_p000006,12,increased work of breathing. Wound redness and purulent discharge at incision.,0,0,0,0,1,0
+A_p000006,16,breathing fast. Patient appears confused and restless. Erythema around wound edges.,1,0,0,0,1,0
+A_p000007,4,HR running high. Wound clean and dry.,0,0,0,0,0,0
+A_p000007,8,tachycardic on monitor. increased work of breathing.,0,0,0,0,0,0
+A_p000007,12,"tachycardic on monitor. No cough, no chills.",0,0,0,0,0,0
+A_p000007,16,"tachycardic on monitor. No cough, no chills.",0,0,0,0,0,0
+A_p000007,20,"HR running high. BP soft, MD aware. New confusion, disoriented to time.",1,0,0,0,0,0
+A_p000007,24,"Spiked a temp overnight. HR running high. breathing fast. BP soft, MD aware.",0,0,0,0,0,0
+A_p000007,28,"Feels warm to touch. tachycardic on monitor. Alert and oriented x3, denies confusion. Tolerating feeds.",0,0,0,0,0,0

@@ -1,0 +1,68 @@
+{
+  "core_vitals_labs": {
+    "AUROC": 0.7062,
+    "AUPRC": 0.0332,
+    "PhysioNet_utility_row_level": -0.0037,
+    "n_test_patients": 90,
+    "alerts_with_immediate_rules": {
+      "septic_patients": 7,
+      "pct_septic_alerted_1to12h_before_onset": 57.1,
+      "pct_septic_alerted_incl_late": 71.4,
+      "median_lead_time_hours": 8.5,
+      "pct_nonseptic_patients_with_any_alert": 51.8,
+      "alerts_per_100_patient_days": 79.8
+    },
+    "alerts_score_only": {
+      "septic_patients": 7,
+      "pct_septic_alerted_1to12h_before_onset": 0.0,
+      "pct_septic_alerted_incl_late": 0.0,
+      "median_lead_time_hours": null,
+      "pct_nonseptic_patients_with_any_alert": 1.2,
+      "alerts_per_100_patient_days": 0.7
+    }
+  },
+  "with_synthetic_notes": {
+    "AUROC": 0.8187,
+    "AUPRC": 0.083,
+    "PhysioNet_utility_row_level": 0.1882,
+    "n_test_patients": 90,
+    "alerts_with_immediate_rules": {
+      "septic_patients": 7,
+      "pct_septic_alerted_1to12h_before_onset": 85.7,
+      "pct_septic_alerted_incl_late": 85.7,
+      "median_lead_time_hours": 5.5,
+      "pct_nonseptic_patients_with_any_alert": 57.8,
+      "alerts_per_100_patient_days": 87.2
+    },
+    "alerts_score_only": {
+      "septic_patients": 7,
+      "pct_septic_alerted_1to12h_before_onset": 42.9,
+      "pct_septic_alerted_incl_late": 42.9,
+      "median_lead_time_hours": 2.0,
+      "pct_nonseptic_patients_with_any_alert": 8.4,
+      "alerts_per_100_patient_days": 10.3
+    }
+  },
+  "train_A_test_B": {
+    "AUROC": 0.7944,
+    "AUPRC": 0.1012,
+    "PhysioNet_utility_row_level": 0.0621,
+    "n_test_patients": 300,
+    "alerts_with_immediate_rules": {
+      "septic_patients": 18,
+      "pct_septic_alerted_1to12h_before_onset": 22.2,
+      "pct_septic_alerted_incl_late": 33.3,
+      "median_lead_time_hours": 11.0,
+      "pct_nonseptic_patients_with_any_alert": 42.2,
+      "alerts_per_100_patient_days": 61.1
+    },
+    "alerts_score_only": {
+      "septic_patients": 18,
+      "pct_septic_alerted_1to12h_before_onset": 5.6,
+      "pct_septic_alerted_incl_late": 5.6,
+      "median_lead_time_hours": 11.0,
+      "pct_nonseptic_patients_with_any_alert": 0.0,
+      "alerts_per_100_patient_days": 0.6
+    }
+  }
+}

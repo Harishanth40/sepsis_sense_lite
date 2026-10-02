@@ -1,0 +1,18 @@
+{
+  "tag": "v2_nobeh_core",
+  "policy": {
+    "imm": "old",
+    "consec": 3,
+    "cooldown": 12,
+    "high": 70
+  },
+  "min_early_target": 80.0,
+  "chosen_on": "tune half",
+  "reported_on": "final half",
+  "final_half": {
+    "final_early%": 85.9,
+    "final_alerts/100pd": 88.4,
+    "final_FPpat%": 66.2,
+    "final_lead_h": 5.0
+  }
+}

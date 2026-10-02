@@ -1,0 +1,148 @@
+{
+  "_readme": "EDITABLE BY THE HOSPITAL. This file contains NO medicines or doses on purpose. It lists investigations, monitoring, escalation, source search and prevention only. Treatment decisions belong entirely to the treating clinician and the local sepsis pathway.",
+  "hour1_bundle": {
+    "lactate": "Check lactate (blood test); repeat in 2-4 h if raised.",
+    "cultures": "Consider taking blood cultures and cultures from the suspected source (before any treatment is started, if no delay).",
+    "treatment_review": "Prompt the treating physician to review, without delay, whether time-critical sepsis treatment is needed, following the local sepsis pathway. Choice of treatment is the doctor's decision.",
+    "perfusion_review": "Low BP or high lactate: urgent bedside assessment of circulation, hydration status and urine output by a physician.",
+    "escalation": "BP still low after physician review: escalate to ICU / senior doctor.",
+    "source_control": "Identify the likely source and discuss source control (drain, debride, remove infected device) with the senior team."
+  },
+  "source_specific": {
+    "respiratory": {
+      "label": "Respiratory sepsis (lungs)",
+      "workup": [
+        "Chest X-ray (or CT)",
+        "Oxygenation check: SpO2 and blood gas",
+        "Sputum / tracheal aspirate culture",
+        "Auscultate chest for focal crackles"
+      ],
+      "source_control": [
+        "Drain significant pleural effusion / empyema",
+        "Airway clearance and respiratory support as the physician decides"
+      ],
+      "red_flags": [
+        "Falling SpO2 or rising respiratory rate: urgent senior / ICU review"
+      ]
+    },
+    "urosepsis": {
+      "label": "Urosepsis (urinary tract / kidney)",
+      "workup": [
+        "Urinalysis (pus cells, nitrite) and urine culture",
+        "Renal ultrasound / CT if obstruction suspected (flank pain, low urine output)",
+        "Check for an indwelling urinary catheter"
+      ],
+      "source_control": [
+        "Relieve any obstruction urgently (urology review)",
+        "Remove or replace the urinary catheter"
+      ],
+      "red_flags": [
+        "Infected and obstructed kidney is a urological emergency"
+      ]
+    },
+    "abdominal": {
+      "label": "Abdominal sepsis",
+      "workup": [
+        "Abdominal exam: rigidity, guarding, tenderness",
+        "Liver function tests; amylase / lipase if indicated",
+        "Ultrasound or CT abdomen; erect chest X-ray for free air"
+      ],
+      "source_control": [
+        "Urgent surgical / interventional review for perforation, abscess, cholangitis or ischaemic bowel"
+      ],
+      "red_flags": [
+        "Rigid (board-like) abdomen or free air: surgical emergency",
+        "Fever + jaundice + right upper abdominal pain: suspect biliary infection, urgent senior review"
+      ]
+    },
+    "bloodstream": {
+      "label": "Bloodstream sepsis (including line-related)",
+      "workup": [
+        "Two sets of blood cultures from separate sites",
+        "If a line is present: one culture from the line and one peripheral",
+        "Inspect IV / central line sites for redness or pus",
+        "Listen for a new murmur; look for nail / skin signs; discuss echocardiography if suspected"
+      ],
+      "source_control": [
+        "Consider removing the suspected line if other access exists"
+      ],
+      "red_flags": [
+        "Positive cultures with a new murmur: suspect endocarditis, urgent senior review"
+      ]
+    },
+    "skin": {
+      "label": "Skin and soft-tissue sepsis",
+      "workup": [
+        "Mark the border of the redness and re-check hourly",
+        "Compare pain level with how the skin looks",
+        "Look for blisters, dark / black skin, crepitus",
+        "Wound / tissue culture; imaging only if it does not delay surgical review"
+      ],
+      "source_control": [
+        "Urgent surgical review: debridement is the main source control",
+        "Drain any abscess"
+      ],
+      "red_flags": [
+        "Pain out of proportion, fast-spreading redness, blisters / black skin or crepitus: suspect necrotising infection - SURGICAL EMERGENCY, call the surgeon immediately"
+      ]
+    },
+    "cns": {
+      "label": "CNS (NOT covered by this prototype)",
+      "workup": [
+        "Neurological exam, GCS, imaging then lumbar puncture if safe"
+      ],
+      "source_control": [
+        "Neurosurgical review if abscess / empyema"
+      ],
+      "red_flags": []
+    }
+  },
+  "unknown_source": {
+    "workup": [
+      "Systematic search for source: chest (X-ray), urine, skin and wounds, lines/catheters, abdomen, CNS if altered mental state",
+      "Review recent procedures, travel, immunosuppression, prior culture results"
+    ]
+  },
+  "reassessment": [
+    "Re-check vitals, urine output, mental state and capillary refill at least hourly while High risk.",
+    "Re-check lactate in 2-4 h if raised; aim for a falling trend.",
+    "Review culture results daily and share them with the treating team.",
+    "Escalate to ICU / senior review if risk stays High or MAP / lactate worsen."
+  ],
+  "prevention_patient_level": {
+    "general": [
+      "Daily review: is every line and catheter still needed? Remove early.",
+      "Hand hygiene before and after every patient contact.",
+      "Good glycaemic control and nutrition support.",
+      "Early mobilisation and pressure-area care."
+    ],
+    "respiratory": [
+      "Ventilator bundle: head of bed 30-45 degrees, oral care, daily sedation / weaning review",
+      "Encourage deep breathing and coughing; aspiration precautions"
+    ],
+    "urosepsis": [
+      "Remove the urinary catheter as soon as possible; keep a closed drainage system",
+      "Keep adequate hydration; perineal hygiene"
+    ],
+    "abdominal": [
+      "After surgery: check wound and abdomen daily and report new pain or rigidity early",
+      "Aseptic technique for drains; early feeding and mobilisation per surgical team"
+    ],
+    "bloodstream": [
+      "Aseptic line insertion and maintenance bundle; check dressing daily",
+      "Use lines only when needed; label insertion date"
+    ],
+    "skin": [
+      "Aseptic dressing technique; keep wounds clean and dry; check daily for redness, swelling, discharge",
+      "Pressure-area care and early reporting of rapidly spreading redness"
+    ]
+  },
+  "prevention_hospital_level": [
+    "Routine sepsis screening on every ward using an early warning score plus this alert.",
+    "Antimicrobial stewardship: culture-guided, shortest effective course.",
+    "Vaccination programmes (influenza, pneumococcal and others per national schedule).",
+    "Infection-control audits: CLABSI, CAUTI, VAP and surgical-site infection rates.",
+    "Staff training on the Hour-1 sepsis bundle and escalation pathways."
+  ],
+  "disclaimer": "Decision SUPPORT only. The system suggests tests, monitoring, escalation and prevention, never medicines or doses. A qualified clinician verifies against the local sepsis protocol and decides every action."
+}
