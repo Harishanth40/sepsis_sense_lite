@@ -687,15 +687,33 @@ async function startServer() {
     app.use(vite.middlewares);
   }
 
-  app.listen(PORT, '0.0.0.0', () => {
-    console.log(`SepsisSense server listening on http://0.0.0.0:${PORT}`);
-    console.log(`Open in browser: http://localhost:${PORT}`);
+  const server = app.listen(PORT, '0.0.0.0', () => {
+    console.log(`\n======================================================`);
+    console.log(`?? SepsisSense server listening on http://0.0.0.0:${PORT}`);
+    console.log(`?? Open in browser: http://localhost:${PORT}`);
+    console.log(`======================================================\n`);
     
     // Auto-open default browser when server is ready
     if (process.platform === 'win32' && !process.env.NO_OPEN) {
       import('child_process').then(({ exec }) => {
         exec(`start http://localhost:${PORT}`);
       }).catch(() => {});
+    }
+  });
+
+  server.on('error', (err: any) => {
+    if (err.code === 'EADDRINUSE') {
+      console.log(`\n======================================================`);
+      console.log(`??  Port ${PORT} is already running an active SepsisSense server!`);
+      console.log(`?? Opening active website in your browser: http://localhost:${PORT}`);
+      console.log(`======================================================\n`);
+      if (process.platform === 'win32') {
+        import('child_process').then(({ exec }) => {
+          exec(`start http://localhost:${PORT}`);
+        }).catch(() => {});
+      }
+    } else {
+      console.error('Server error:', err);
     }
   });
 }
