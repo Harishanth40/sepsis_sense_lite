@@ -43,10 +43,19 @@ export interface PatientData {
   notes?: string | null;
 }
 
+export interface LocalAdviceItem {
+  tag: string;
+  title: string;
+  advice: string;
+}
+
 export interface PredictionResult {
   risk_level: 'Low' | 'Moderate' | 'High';
   probability: number;
   message: string;
+  sepsis_type: string;
+  suspected_source: string;
+  local_advices: LocalAdviceItem[];
   contributing_factors: string[];
   qsofa_score: number;
   sirs_score: number;
@@ -72,7 +81,6 @@ function evaluateSepsisRisk(data: PatientData, startTimeMs: number): PredictionR
   const hr = typeof data.heart_rate === 'number' ? data.heart_rate : null;
   const rr = typeof data.respiratory_rate === 'number' ? data.respiratory_rate : null;
   const sbp = typeof data.systolic_bp === 'number' ? data.systolic_bp : null;
-  const dbp = typeof data.diastolic_bp === 'number' ? data.diastolic_bp : null;
   const lactate = typeof data.lactate === 'number' ? data.lactate : null;
   const creatinine = typeof data.creatinine === 'number' ? data.creatinine : null;
   const spo2 = typeof data.spo2 === 'number' ? data.spo2 : null;
@@ -148,20 +156,20 @@ function evaluateSepsisRisk(data: PatientData, startTimeMs: number): PredictionR
     }
   }
 
-  // 6. Body Temperature (SIRS: Temp > 38.0�C or < 36.0�C)
+  // 6. Body Temperature (SIRS: Temp > 38.0°C or < 36.0°C)
   if (temp !== null) {
     if (temp >= 39.0) {
       riskScore += 14;
       sirsScore += 1;
-      contributing_factors.push(`Significant hyperthermia (Temperature: ${temp.toFixed(1)} �C)`);
+      contributing_factors.push(`Significant hyperthermia (Temperature: ${temp.toFixed(1)} °C)`);
     } else if (temp > 38.0) {
       riskScore += 8;
       sirsScore += 1;
-      contributing_factors.push(`Fever (Temperature: ${temp.toFixed(1)} �C)`);
+      contributing_factors.push(`Fever (Temperature: ${temp.toFixed(1)} °C)`);
     } else if (temp < 36.0) {
       riskScore += 16;
       sirsScore += 1;
-      contributing_factors.push(`Hypothermia - ominous septic dysregulation (Temperature: ${temp.toFixed(1)} �C)`);
+      contributing_factors.push(`Hypothermia - ominous septic dysregulation (Temperature: ${temp.toFixed(1)} °C)`);
     }
   }
 
@@ -181,21 +189,21 @@ function evaluateSepsisRisk(data: PatientData, startTimeMs: number): PredictionR
     if (wbc > 12.0) {
       riskScore += 8;
       sirsScore += 1;
-      contributing_factors.push(`Leukocytosis (WBC: ${wbc.toFixed(1)} � 10?/L)`);
+      contributing_factors.push(`Leukocytosis (WBC: ${wbc.toFixed(1)} × 10⁹/L)`);
     } else if (wbc < 4.0) {
       riskScore += 14;
       sirsScore += 1;
-      contributing_factors.push(`Leukopenia - immune exhaustion (WBC: ${wbc.toFixed(1)} � 10?/L)`);
+      contributing_factors.push(`Leukopenia - immune exhaustion (WBC: ${wbc.toFixed(1)} × 10⁹/L)`);
     }
   }
 
-  // 9. Shock Index (HR / SBP). Normal < 0.7; > 0.9 suggests occult shock
+  // 9. Shock Index (HR / SBP). Normal < 0.7; >= 0.9 suggests hemodynamic decompensation
   let shockIndex: number | null = null;
   if (hr !== null && sbp !== null && sbp > 0) {
     shockIndex = parseFloat((hr / sbp).toFixed(2));
     if (shockIndex >= 1.0) {
       riskScore += 14;
-      contributing_factors.push(`Elevated shock index ${shockIndex} (>0.9 indicates hemodynamic decompensation)`);
+      contributing_factors.push(`Elevated shock index ${shockIndex} (>=0.9 indicates hemodynamic decompensation)`);
     } else if (shockIndex >= 0.9) {
       riskScore += 6;
       contributing_factors.push(`Borderline shock index ${shockIndex}`);
@@ -221,13 +229,112 @@ function evaluateSepsisRisk(data: PatientData, startTimeMs: number): PredictionR
 
   if (qsofaScore >= 2 || (isHypotension && isSevereLactate) || riskScore >= 56 || probability >= 0.65) {
     risk_level = 'High';
-    message = 'High Sepsis Risk � Immediate Clinical Evaluation Recommended';
+    message = 'High Sepsis Risk — Immediate Clinical Evaluation Recommended';
   } else if (probability >= 0.30 || qsofaScore === 1 || (lactate !== null && lactate >= 2.0) || sirsScore >= 2 || riskScore >= 20) {
     risk_level = 'Moderate';
-    message = 'Moderate Sepsis Risk. Heightened surveillance and repeat lactate within 2-4 hours recommended.';
+    message = 'Moderate Sepsis Risk — Heightened surveillance and repeat lactate recommended.';
   } else {
     risk_level = 'Low';
-    message = 'Low Sepsis Risk. Patient parameters currently within acceptable baseline.';
+    message = 'Low Sepsis Risk — Patient parameters currently within acceptable baseline.';
+  }
+
+  // Determine Sepsis Stage / Type
+  let sepsis_type = 'Stable Baseline (Low Risk)';
+  if (risk_level === 'High') {
+    if ((shockIndex !== null && shockIndex >= 1.0) || (sbp !== null && sbp < 90) || (lactate !== null && lactate >= 4.0)) {
+      sepsis_type = 'Septic Shock / Severe Sepsis (Stage 3 - Emergency Alert)';
+    } else {
+      sepsis_type = 'Severe Sepsis with Organ Stress (Stage 2 - High Urgency)';
+    }
+  } else if (risk_level === 'Moderate') {
+    sepsis_type = 'Early Sepsis / Developing Infection (Stage 1 - Moderate Alert)';
+  } else {
+    sepsis_type = 'Stable Baseline / No Active Sepsis (Low Risk)';
+  }
+
+  // Determine Likely Infection Source / Type
+  let suspected_source = 'No active infection signs detected';
+  if (rr !== null && (rr >= 22 || (spo2 !== null && spo2 <= 93))) {
+    suspected_source = 'Respiratory / Pulmonary System (Suspected Pneumonia or Chest Infection)';
+  } else if (creatinine !== null && creatinine >= 1.5) {
+    suspected_source = 'Renal / Urinary Tract System (Suspected UTI or Kidney Strain)';
+  } else if (temp !== null && temp >= 38.5 && lactate !== null && lactate >= 2.0) {
+    suspected_source = 'Bloodstream / Systemic Infection (Bacteremia)';
+  } else if (risk_level !== 'Low') {
+    suspected_source = 'Systemic Bacterial or Viral Infection (Clinical Source Under Investigation)';
+  }
+
+  // Generate Simple English Local & Patient Care Advices
+  const local_advices: LocalAdviceItem[] = [];
+
+  if (risk_level === 'High') {
+    local_advices.push({
+      tag: 'Urgent Care',
+      title: 'Give Emergency IV Saline Fluids',
+      advice: 'Start fast intravenous (IV) fluids immediately to raise low blood pressure and protect kidneys and heart.'
+    });
+    local_advices.push({
+      tag: 'Antibiotics',
+      title: 'Start IV Antibiotics within 1 Hour',
+      advice: 'Give broad-spectrum IV antibiotics immediately to kill the infection before it causes further organ harm.'
+    });
+    local_advices.push({
+      tag: 'Lab Tests',
+      title: 'Collect Blood Culture & Lactate Test',
+      advice: 'Take blood samples to identify the exact bacteria and re-check blood lactate to see if tissue oxygen is improving.'
+    });
+    local_advices.push({
+      tag: 'Breathing',
+      title: 'Provide Oxygen & Airway Support',
+      advice: 'Give supplemental oxygen if breathing is fast (>20 breaths/min) or oxygen levels are low.'
+    });
+    local_advices.push({
+      tag: 'Hospital Unit',
+      title: 'Move to ICU / High Dependency Care',
+      advice: 'Transfer patient immediately to the ICU or critical care unit for continuous 24/7 vital sign and blood pressure monitoring.'
+    });
+  } else if (risk_level === 'Moderate') {
+    local_advices.push({
+      tag: 'Doctor Check',
+      title: 'Examine & Find Infection Source',
+      advice: 'Consult doctor to examine chest/lungs, urine, abdomen, or any skin cuts to find the root source of infection.'
+    });
+    local_advices.push({
+      tag: 'Monitoring',
+      title: 'Check Vitals Every 1 to 2 Hours',
+      advice: 'Regularly check body temperature, heart rate, blood pressure, and breathing to catch any sudden changes early.'
+    });
+    local_advices.push({
+      tag: 'Hydration',
+      title: 'Maintain Good Hydration & IV Line',
+      advice: 'Ensure patient receives adequate IV fluids or clean drinking fluids to maintain strong blood circulation.'
+    });
+    local_advices.push({
+      tag: 'Repeat Labs',
+      title: 'Repeat Blood Count & Lactate in 2-4 Hours',
+      advice: 'Perform repeat laboratory tests to verify if infection markers are resolving or rising.'
+    });
+    local_advices.push({
+      tag: 'Medication',
+      title: 'Start Prompt Targeted Antibiotics',
+      advice: 'Take prescribed oral or IV antibiotics on schedule without missing any doses.'
+    });
+  } else {
+    local_advices.push({
+      tag: 'Stable',
+      title: 'Routine Health & Vital Observations',
+      advice: 'Continue standard routine vital checks every 4 to 6 hours as per normal ward protocol.'
+    });
+    local_advices.push({
+      tag: 'Hydration',
+      title: 'Adequate Rest and Drinking Fluids',
+      advice: 'Drink plenty of water or electrolytes, eat nourishing food, and ensure sufficient bed rest.'
+    });
+    local_advices.push({
+      tag: 'Warning Signs',
+      title: 'Watch for Sudden Fever or Shivering',
+      advice: 'Call doctor immediately if sudden high fever (>38.5°C), rapid breathing, shivering, or confusion develops.'
+    });
   }
 
   // Surviving Sepsis Campaign (SSC) 1-Hour Bundle Recommendations
@@ -236,8 +343,8 @@ function evaluateSepsisRisk(data: PatientData, startTimeMs: number): PredictionR
     clinical_actions.push('Measure blood lactate level immediately; re-measure if initial lactate > 2.0 mmol/L.');
     clinical_actions.push('Obtain blood cultures prior to initiation of antimicrobial therapy.');
     clinical_actions.push('Administer broad-spectrum empiric IV antimicrobials within 1 hour.');
-    clinical_actions.push('Rapidly administer 30 mL/kg crystalloid for hypotension (MAP < 65) or lactate = 4.0 mmol/L.');
-    clinical_actions.push('Apply vasopressors (norepinephrine first-line) during or after fluid resuscitation to maintain MAP = 65 mmHg.');
+    clinical_actions.push('Rapidly administer 30 mL/kg crystalloid for hypotension (MAP < 65) or lactate >= 4.0 mmol/L.');
+    clinical_actions.push('Apply vasopressors (norepinephrine first-line) during or after fluid resuscitation to maintain MAP >= 65 mmHg.');
   } else if (risk_level === 'Moderate') {
     clinical_actions.push('Perform bedside clinical assessment and repeat vital signs every 1-2 hours.');
     clinical_actions.push('Review infectious sources (pulmonary, urinary tract, abdominal, catheter).');
@@ -254,6 +361,9 @@ function evaluateSepsisRisk(data: PatientData, startTimeMs: number): PredictionR
     risk_level,
     probability,
     message,
+    sepsis_type,
+    suspected_source,
+    local_advices,
     contributing_factors: contributing_factors.length > 0 ? contributing_factors : ['All measured clinical vitals within stable reference ranges'],
     qsofa_score: qsofaScore,
     sirs_score: sirsScore,

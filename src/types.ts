@@ -35,10 +35,19 @@ export interface ExtractedRecordData {
   message: string;
 }
 
+export interface LocalAdviceItem {
+  tag: string;
+  title: string;
+  advice: string;
+}
+
 export interface SepsisPredictionResponse {
   risk_level: 'Low' | 'Moderate' | 'High';
   probability: number;
   message: string;
+  sepsis_type: string;
+  suspected_source: string;
+  local_advices: LocalAdviceItem[];
   contributing_factors: string[];
   qsofa_score: number;
   sirs_score: number;

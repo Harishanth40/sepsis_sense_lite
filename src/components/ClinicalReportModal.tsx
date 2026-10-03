@@ -1,6 +1,6 @@
 import React from 'react';
-import { X, Printer, Activity, ShieldAlert, CheckCircle2, AlertOctagon } from 'lucide-react';
-import { PatientFormState, SepsisPredictionResponse, BloodGroup } from '../types';
+import { X, Printer, Activity, HeartPulse, Stethoscope, Sparkles } from 'lucide-react';
+import { PatientFormState, BloodGroup, SepsisPredictionResponse } from '../types';
 
 interface ClinicalReportModalProps {
   isOpen: boolean;
@@ -24,19 +24,19 @@ export const ClinicalReportModal: React.FC<ClinicalReportModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 overflow-y-auto bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
-      <div className="bg-white rounded-3xl shadow-2xl max-w-2xl w-full border border-slate-200 overflow-hidden print:border-none print:shadow-none print:m-0 print:w-full">
-        {/* Modal Top Bar (hidden during print) */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100 bg-slate-50/80 print:hidden">
+    <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4 overflow-y-auto">
+      <div className="bg-white rounded-3xl shadow-2xl max-w-3xl w-full my-8 overflow-hidden animate-in fade-in zoom-in-95">
+        {/* Header Bar */}
+        <div className="bg-slate-100 px-6 py-4 border-b border-slate-200 flex items-center justify-between print:hidden">
           <div className="flex items-center gap-2">
-            <Activity className="w-5 h-5 text-blue-600" />
+            <Activity className="w-5 h-5 text-[#007A78]" />
             <h3 className="font-bold text-slate-800 text-sm">Clinical Sepsis Risk Report</h3>
           </div>
           <div className="flex items-center gap-2">
             <button
               type="button"
               onClick={handlePrint}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-white bg-blue-600 hover:bg-blue-700 rounded-xl transition-colors shadow-xs"
+              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 text-xs font-semibold text-white bg-[#007A78] hover:bg-[#006967] rounded-xl transition-colors shadow-xs cursor-pointer"
             >
               <Printer className="w-3.5 h-3.5" />
               <span>Print / Save PDF</span>
@@ -44,7 +44,7 @@ export const ClinicalReportModal: React.FC<ClinicalReportModalProps> = ({
             <button
               type="button"
               onClick={onClose}
-              className="p-1.5 text-slate-400 hover:text-slate-600 rounded-xl hover:bg-slate-200/50 transition-colors"
+              className="p-1.5 text-slate-400 hover:text-slate-600 rounded-xl hover:bg-slate-200/50 transition-colors cursor-pointer"
             >
               <X className="w-4 h-4" />
             </button>
@@ -57,8 +57,8 @@ export const ClinicalReportModal: React.FC<ClinicalReportModalProps> = ({
           <div className="flex items-start justify-between border-b-2 border-slate-900 pb-4 mb-6">
             <div>
               <div className="flex items-center gap-2">
-                <span className="text-xl font-black tracking-tight text-slate-900">SepsisSense</span>
-                <span className="text-xs uppercase font-bold text-blue-700 bg-blue-50 px-2 py-0.5 rounded border border-blue-200">
+                <span className="text-xl font-black tracking-tight text-slate-900">SepsisSense Lite</span>
+                <span className="text-xs uppercase font-bold text-[#007A78] bg-teal-50 px-2 py-0.5 rounded border border-teal-200">
                   Decision-Support Summary
                 </span>
               </div>
@@ -83,6 +83,28 @@ export const ClinicalReportModal: React.FC<ClinicalReportModalProps> = ({
             <div>
               <p className="text-[10px] uppercase font-bold text-slate-400">Assessment Status</p>
               <p className="text-sm font-bold text-emerald-700">Completed</p>
+            </div>
+          </div>
+
+          {/* Sepsis Stage & Suspected Infection Source */}
+          <div className="mb-6 p-4 rounded-2xl bg-teal-50/50 border border-teal-200/80 grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="flex items-start gap-2.5">
+              <HeartPulse className="w-4 h-4 text-[#007A78] shrink-0 mt-0.5" />
+              <div>
+                <p className="text-[10px] uppercase font-bold text-slate-400">Identified Sepsis Type / Stage</p>
+                <p className="text-xs font-bold text-slate-900 mt-0.5">
+                  {result.sepsis_type || (result.risk_level === 'High' ? 'Severe Sepsis / Septic Shock Risk (Stage 3)' : result.risk_level === 'Moderate' ? 'Early Sepsis / Infection Warning (Stage 1)' : 'Stable Baseline')}
+                </p>
+              </div>
+            </div>
+            <div className="flex items-start gap-2.5">
+              <Stethoscope className="w-4 h-4 text-blue-700 shrink-0 mt-0.5" />
+              <div>
+                <p className="text-[10px] uppercase font-bold text-slate-400">Suspected Infection Source</p>
+                <p className="text-xs font-bold text-slate-900 mt-0.5">
+                  {result.suspected_source || 'Respiratory / Systemic'}
+                </p>
+              </div>
             </div>
           </div>
 
@@ -197,6 +219,43 @@ export const ClinicalReportModal: React.FC<ClinicalReportModalProps> = ({
               ))}
             </div>
           </div>
+
+          {/* Local Disease Advice (Simple English) */}
+          {result.local_advices && result.local_advices.length > 0 && (
+            <div className="mb-6 p-4 rounded-2xl border border-teal-200 bg-teal-50/40">
+              <div className="flex items-center gap-1.5 mb-2.5">
+                <Sparkles className="w-4 h-4 text-[#007A78]" />
+                <h4 className="text-xs font-bold uppercase tracking-wider text-[#007A78]">
+                  Immediate Local Advice & Patient Guidance (Plain English)
+                </h4>
+              </div>
+              <div className="space-y-2">
+                {result.local_advices.map((item, idx) => (
+                  <div key={idx} className="text-xs bg-white p-2.5 rounded-xl border border-teal-100">
+                    <p className="font-bold text-slate-900">{item.title}</p>
+                    <p className="text-slate-600 mt-0.5 leading-relaxed">{item.advice}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Recommended Hospital 1-Hour Protocol */}
+          {result.clinical_actions && result.clinical_actions.length > 0 && (
+            <div className="mb-6 p-4 rounded-2xl border border-blue-200 bg-blue-50/40">
+              <h4 className="text-xs font-bold uppercase tracking-wider text-blue-900 mb-2">
+                Hospital 1-Hour Protocol Bundle
+              </h4>
+              <ul className="space-y-1 text-xs text-slate-700">
+                {result.clinical_actions.map((act, i) => (
+                  <li key={i} className="flex items-start gap-1.5">
+                    <span className="font-bold text-blue-600">•</span>
+                    <span>{act}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
 
           {/* Disclaimer & Attestation */}
           <div className="mt-8 pt-4 border-t border-slate-200 text-[11px] text-slate-500">
