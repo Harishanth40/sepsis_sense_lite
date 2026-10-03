@@ -1,5 +1,5 @@
 import React from 'react';
-import { Activity, FileUp, Sparkles } from 'lucide-react';
+import { Activity, FileUp } from 'lucide-react';
 
 interface HeaderProps {
   onOpenUpload: () => void;
@@ -14,9 +14,14 @@ export const Header: React.FC<HeaderProps> = ({ onOpenUpload, onSelectPreset }) 
         <div className="w-10 h-10 rounded-full bg-[#007A78] flex items-center justify-center text-white shadow-xs">
           <Activity className="w-5 h-5 stroke-[2.5]" />
         </div>
-        <div className="flex items-center">
-          <span className="text-xl font-bold tracking-tight text-slate-900">Sepsis</span>
-          <span className="text-xl font-bold tracking-tight text-[#007A78]">Sense</span>
+        <div className="flex items-center gap-1.5">
+          <div className="flex items-center">
+            <span className="text-xl font-bold tracking-tight text-slate-900">Sepsis</span>
+            <span className="text-xl font-bold tracking-tight text-[#007A78]">Sense</span>
+          </div>
+          <span className="px-1.5 py-0.5 text-[11px] font-bold uppercase tracking-wider bg-teal-50 text-[#007A78] border border-teal-200/80 rounded-md">
+            Lite
+          </span>
         </div>
       </div>
 

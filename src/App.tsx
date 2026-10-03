@@ -5,7 +5,7 @@ import { ChatInputBar } from './components/ChatInputBar';
 import { UploadModal } from './components/UploadModal';
 import { ResultPanel } from './components/ResultPanel';
 import { ClinicalReportModal } from './components/ClinicalReportModal';
-import { Lock, AlertCircle, MessageSquare } from 'lucide-react';
+import { AlertCircle, MessageSquare } from 'lucide-react';
 import {
   PatientFormState,
   BloodGroup,
@@ -389,7 +389,7 @@ export default function App() {
         {/* Centered Main Title & Subtitle */}
         <div className="text-center mb-8 sm:mb-10 max-w-2xl">
           <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-slate-900">
-            AI-Powered Sepsis Risk Assessment
+            AI-Powered Sepsis Early Warning System
           </h1>
           <p className="mt-2.5 text-sm sm:text-base text-slate-600">
             Upload patient records or enter clinical values manually to predict sepsis risk.
@@ -424,11 +424,7 @@ export default function App() {
           isAnalyzing={isAnalyzing}
         />
 
-        {/* Centered Privacy Statement below the card */}
-        <div className="mt-4 sm:mt-5 flex items-center justify-center gap-2 text-xs sm:text-sm text-slate-500">
-          <Lock className="w-3.5 h-3.5 text-slate-400 stroke-[2]" />
-          <span>Uploaded records are processed only for this analysis and are not stored.</span>
-        </div>
+
 
         {/* Results Section */}
         <div ref={resultRef} className="w-full">
