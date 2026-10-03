@@ -28,31 +28,40 @@ export const Header: React.FC<HeaderProps> = ({ onOpenUpload, onSelectPreset }) 
       {/* Right Controls */}
       <div className="flex items-center gap-3">
         {onSelectPreset && (
-          <div className="hidden md:flex items-center gap-1.5 text-xs text-slate-500">
-            <span className="text-[11px] text-slate-400 font-medium mr-1">Sample cases:</span>
+          <div className="hidden md:flex items-center gap-2 text-xs text-slate-500">
+            <span className="text-[11px] text-slate-400 font-semibold mr-0.5">Sample cases:</span>
             <button
               type="button"
               onClick={() => onSelectPreset('high')}
-              className="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-rose-50 hover:text-rose-700 font-medium transition-colors"
-              title="Load Septic Shock (High Risk) Patient"
+              className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-rose-50/90 hover:bg-rose-100 border border-rose-200 text-rose-800 font-medium transition-all shadow-2xs hover:shadow-xs active:scale-95 cursor-pointer"
+              title="Load Septic Shock (High Risk: 98%) Patient and Auto-Analyze"
             >
-              High Risk
+              <span>High Risk</span>
+              <span className="px-1.5 py-0.2 rounded-md bg-rose-200/80 text-rose-900 text-[10px] font-bold">
+                98%
+              </span>
             </button>
             <button
               type="button"
               onClick={() => onSelectPreset('moderate')}
-              className="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-amber-50 hover:text-amber-700 font-medium transition-colors"
-              title="Load Borderline Ward Patient"
+              className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-amber-50/90 hover:bg-amber-100 border border-amber-200 text-amber-800 font-medium transition-all shadow-2xs hover:shadow-xs active:scale-95 cursor-pointer"
+              title="Load Borderline Ward (Moderate Risk: 64%) Patient and Auto-Analyze"
             >
-              Moderate
+              <span>Moderate</span>
+              <span className="px-1.5 py-0.2 rounded-md bg-amber-200/80 text-amber-900 text-[10px] font-bold">
+                64%
+              </span>
             </button>
             <button
               type="button"
               onClick={() => onSelectPreset('low')}
-              className="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-emerald-50 hover:text-emerald-700 font-medium transition-colors"
-              title="Load Post-Op Stable Patient"
+              className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-emerald-50/90 hover:bg-emerald-100 border border-emerald-200 text-emerald-800 font-medium transition-all shadow-2xs hover:shadow-xs active:scale-95 cursor-pointer"
+              title="Load Post-Op Stable (Low Risk: 7%) Patient and Auto-Analyze"
             >
-              Low Risk
+              <span>Low Risk</span>
+              <span className="px-1.5 py-0.2 rounded-md bg-emerald-200/80 text-emerald-900 text-[10px] font-bold">
+                7%
+              </span>
             </button>
           </div>
         )}
@@ -60,7 +69,7 @@ export const Header: React.FC<HeaderProps> = ({ onOpenUpload, onSelectPreset }) 
         <button
           type="button"
           onClick={onOpenUpload}
-          className="inline-flex items-center gap-2 px-4 py-2 bg-[#007A78] hover:bg-[#006967] text-white rounded-full text-sm font-medium transition-colors shadow-xs"
+          className="inline-flex items-center gap-2 px-4 py-2 bg-[#007A78] hover:bg-[#006967] text-white rounded-full text-sm font-medium transition-colors shadow-xs cursor-pointer"
         >
           <FileUp className="w-4 h-4" />
           <span>Upload Hospital Records</span>

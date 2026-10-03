@@ -1,4 +1,4 @@
-﻿import React, { useState, useRef } from 'react';
+import React, { useState, useRef } from 'react';
 import { Header } from './components/Header';
 import { ClinicalCard } from './components/ClinicalCard';
 import { ChatInputBar } from './components/ChatInputBar';
@@ -170,10 +170,16 @@ export default function App() {
     }
   };
 
-  // Sample record loader
-  const handleLoadSample = (sampleType: string) => {
+  // Sample record loader with instant auto-analysis
+  const handleLoadSample = async (sampleType: string) => {
+    setAnalysisError(null);
+
+    let targetForm: PatientFormState;
+    let targetBg: BloodGroup;
+    let recordInfo: ExtractedRecordData;
+
     if (sampleType === 'icu' || sampleType === 'high') {
-      setForm({
+      targetForm = {
         age: '68',
         blood_group: 'O+',
         temperature: '38.8',
@@ -185,9 +191,9 @@ export default function App() {
         creatinine: '2.1',
         spo2: '91',
         wbc: '18.2'
-      });
-      setBloodGroup('O+');
-      setUploadedRecord({
+      };
+      targetBg = 'O+';
+      recordInfo = {
         fileName: 'ICU_Septic_Shock_Chart.csv',
         fileSize: '36.4 KB',
         fileType: 'text/csv',
@@ -201,10 +207,10 @@ export default function App() {
           age: { value: 68, confidence: 0.99 }
         },
         unidentifiableFields: [],
-        message: 'Record uploaded successfully.'
-      });
+        message: 'High risk ICU sample record loaded successfully.'
+      };
     } else if (sampleType === 'ward' || sampleType === 'moderate') {
-      setForm({
+      targetForm = {
         age: '54',
         blood_group: 'A+',
         temperature: '38.2',
@@ -216,10 +222,26 @@ export default function App() {
         creatinine: '1.2',
         spo2: '95',
         wbc: '11.4'
-      });
-      setBloodGroup('A+');
+      };
+      targetBg = 'A+';
+      recordInfo = {
+        fileName: 'Ward_Borderline_Vitals.csv',
+        fileSize: '24.1 KB',
+        fileType: 'text/csv',
+        extracted: {
+          heart_rate: { value: 98, confidence: 0.96 },
+          systolic_bp: { value: 106, confidence: 0.97 },
+          temperature: { value: 38.2, confidence: 0.95 },
+          respiratory_rate: { value: 22, confidence: 0.94 },
+          lactate: { value: 2.1, confidence: 0.96 },
+          creatinine: { value: 1.2, confidence: 0.95 },
+          age: { value: 54, confidence: 0.98 }
+        },
+        unidentifiableFields: [],
+        message: 'Moderate risk ward sample record loaded successfully.'
+      };
     } else {
-      setForm({
+      targetForm = {
         age: '42',
         blood_group: 'B+',
         temperature: '36.8',
@@ -231,8 +253,75 @@ export default function App() {
         creatinine: '0.9',
         spo2: '99',
         wbc: '6.8'
+      };
+      targetBg = 'B+';
+      recordInfo = {
+        fileName: 'PostOp_Stable_Observation.csv',
+        fileSize: '18.7 KB',
+        fileType: 'text/csv',
+        extracted: {
+          heart_rate: { value: 72, confidence: 0.99 },
+          systolic_bp: { value: 120, confidence: 0.99 },
+          temperature: { value: 36.8, confidence: 0.98 },
+          respiratory_rate: { value: 14, confidence: 0.97 },
+          lactate: { value: 1.1, confidence: 0.98 },
+          creatinine: { value: 0.9, confidence: 0.97 },
+          age: { value: 42, confidence: 0.99 }
+        },
+        unidentifiableFields: [],
+        message: 'Low risk baseline sample record loaded successfully.'
+      };
+    }
+
+    setForm(targetForm);
+    setBloodGroup(targetBg);
+    setUploadedRecord(recordInfo);
+    setSourceMap({
+      age: 'extracted',
+      temperature: 'extracted',
+      heart_rate: 'extracted',
+      respiratory_rate: 'extracted',
+      systolic_bp: 'extracted',
+      lactate: 'extracted',
+      creatinine: 'extracted'
+    });
+
+    // Auto-calculate prediction and display percentage & scores immediately
+    setIsAnalyzing(true);
+    const clientStartTime = performance.now();
+    try {
+      const payload = {
+        age: parseInt(targetForm.age, 10),
+        blood_group: targetBg,
+        temperature: parseFloat(targetForm.temperature),
+        heart_rate: parseFloat(targetForm.heart_rate),
+        respiratory_rate: parseFloat(targetForm.respiratory_rate),
+        systolic_bp: parseFloat(targetForm.systolic_bp),
+        lactate: parseFloat(targetForm.lactate),
+        creatinine: parseFloat(targetForm.creatinine)
+      };
+
+      const response = await fetch('/predict', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
       });
-      setBloodGroup('B+');
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.error || 'Failed to analyze sample data.');
+
+      const clientElapsedSec = parseFloat(((performance.now() - clientStartTime) / 1000).toFixed(2));
+      setPredictionResult({
+        ...data,
+        execution_time_seconds: Math.max(0.05, clientElapsedSec)
+      });
+
+      setTimeout(() => {
+        resultRef.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }, 100);
+    } catch (err: any) {
+      setAnalysisError(err.message || 'Error calculating prediction for sample.');
+    } finally {
+      setIsAnalyzing(false);
     }
   };
 
@@ -386,12 +475,12 @@ export default function App() {
 
       {/* Main Container */}
       <main className="flex-1 max-w-5xl w-full mx-auto px-4 sm:px-6 pt-10 sm:pt-14 pb-8 flex flex-col items-center">
-        {/* Centered Main Title & Subtitle */}
-        <div className="text-center mb-8 sm:mb-10 max-w-2xl">
-          <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-slate-900">
+        {/* Centered Main Title & Subtitle - Guaranteed Single Line */}
+        <div className="text-center mb-8 sm:mb-10 max-w-4xl w-full px-2">
+          <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-extrabold tracking-tight text-slate-900 whitespace-nowrap overflow-hidden text-ellipsis">
             AI-Powered Sepsis Early Warning System
           </h1>
-          <p className="mt-2.5 text-sm sm:text-base text-slate-600">
+          <p className="mt-2 text-xs sm:text-sm md:text-base text-slate-600">
             Upload patient records or enter clinical values manually to predict sepsis risk.
           </p>
         </div>
@@ -423,8 +512,6 @@ export default function App() {
           onAnalyze={handleAnalyze}
           isAnalyzing={isAnalyzing}
         />
-
-
 
         {/* Results Section */}
         <div ref={resultRef} className="w-full">
